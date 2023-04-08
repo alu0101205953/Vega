@@ -1,0 +1,52 @@
+<!--Construir un diagrama de líneas para la evolución del consumo en Canarias.-->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5.22.1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.6.1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.21.2"></script>
+
+</head>
+<body>
+  <div id="vis", style="width: 80vh; height: 190vh;">
+  </div>
+  <script>
+    const spec = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "width": "container",
+      "height": {"step": 20},
+      "title": {
+        "text": "Diagrama de líneas para la evolución del consumo en el total de Canarias",
+      },
+      "data":{
+        "url": "data/energiaISTAC_Grupos.csv", "format": {"type": "csv", "charset": "utf-8"}, "delimiter": ";"},
+      "transform":[ {"filter":  "datum.CodMedida == 1"}],
+      "mark": {
+        "type": "line",
+        "point": true,
+        "strokeWidth": 3,
+        "tooltip": true
+      },
+      "encoding": {
+        "facet": {
+          "field": "Territorio",
+          "type": "nominal",
+          "columns": 3,
+          "sort": {"field": "Territorio", "order": "descending"}
+        },
+        "x": {"field": "Año", "type":"ordinal", "axis": {"title": "Año", "labelAngle": 0}},
+        "y": {"field": "Consumo", "type":"quantitative", "scale": { "domainMin": 0}},
+        "color": {"field": "Grupo", "type": "nominal"},  
+        "resolve": {"axis": {"y": "independent"}}
+      },
+      "config": {
+        "axis": {"titleFontSize": 16, "labelFontSize": 14},
+        "legend": {"titleFontSize": 16, "labelFontSize": 16},
+        "title": {"fontSize": 20}
+      }
+    };  
+  vegaEmbed("#vis", spec, {mode: "vega-lite"}).then(console.log).catch(console.warn);
+  </script>
+  </body>
+  </html>

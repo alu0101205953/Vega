@@ -1,0 +1,53 @@
+<!--Construir un diagrama de burbujas con Vega para la energía consumida en Canarias.-->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5.22.1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.6.1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.21.2"></script>
+
+</head>
+<body>
+  <div id="vis", style="width: 180vh; height: 90vh;">
+  </div>
+  <script>
+    const spec = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "width": "container",
+      "height": "container",
+      "data":{
+        "url": "data/energiaISTAC_Grupos.csv", "format": {"type": "csv", "charset": "utf-8"}, "delimiter": ";"},
+      "title": {
+        "text": "Gráfico de burbujas para la energía consumida en Canarias por año y grupo.",
+      },
+      "transform": [{"filter": "datum.CodMedida == 1 && datum.Territorio == 'Canarias'"}],
+      "mark": {
+          "type": "circle",
+          "opacity": 0.8,
+          "stroke": "black",
+          "strokeWidth": 0.5,
+          "tooltip": true
+      },
+      "encoding": {
+          "x": {"field": "Año", "type": "ordinal", "axis": {"grid": false, "labelAngle": 0}},
+          "y": {"field": "Grupo", "type": "nominal", "axis": {"title": "Grupo"}},
+          "size": {
+            "field": "Consumo",
+            "type": "quantitative",
+            "title": "Consumo",
+
+            "scale": {"rangeMax":1000}
+          },
+          "color": {"field": "Grupo", "type": "nominal"}
+      },
+      "config": {
+        "axis": {"titleFontSize": 16, "labelFontSize": 14},
+        "legend": {"titleFontSize": 16, "labelFontSize": 16},
+        "title": {"fontSize": 20}
+      }
+    };  
+  vegaEmbed("#vis", spec, {mode: "vega-lite"}).then(console.log).catch(console.warn);
+  </script>
+  </body>
+  </html>

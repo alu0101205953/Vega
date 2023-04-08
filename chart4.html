@@ -1,0 +1,45 @@
+<!--Construir un diagrama de barras utilizando Vega para la cantidad de contratos eléctricos en Canarias por islas.-->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5.22.1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.6.1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.21.2"></script>
+
+</head>
+<body>
+  <div id="vis", style="width: 180vh; height: 100vh;">
+  </div>
+  <script>
+    const spec = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "width": "container",
+      "height": "container",
+      "title": {
+        "text": "Gráfico de barras para la cantidad de contratos eléctricos en Canarias por isla y grupo.",
+      },
+      "data":{
+        "url": "data/energiaISTAC_Grupos.csv", "format": {"type": "csv", "charset": "utf-8"}, "delimiter": ";"},
+      "transform":[ {"filter": "datum.CodMedida == 2"}],
+      "mark": {
+        "type": "bar",
+        "size": 8,
+        "tooltip": true
+      },
+      "encoding": {
+          "x": {"field": "Consumo", "type":"quantitative", "scale": { "domainMin": 0}},
+          "y": {"field": "Grupo", "type":"nominal"},
+          "yOffset": {"field": "Territorio", "type":"nominal"},
+          "color": {"field": "Territorio", "type": "nominal"}
+      },
+      "config": {
+        "axis": {"titleFontSize": 16, "labelFontSize": 14},
+        "legend": {"titleFontSize": 16, "labelFontSize": 16},
+        "title": {"fontSize": 20}
+      }
+    };  
+  vegaEmbed("#vis", spec, {mode: "vega-lite"}).then(console.log).catch(console.warn);
+  </script>
+  </body>
+  </html>
